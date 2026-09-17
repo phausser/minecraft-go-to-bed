@@ -1,6 +1,6 @@
 # GoToBed — TODO
 
-> Stand: 2026-09-17 · Iteration 3 lokal fertig (`GoToBed-0.3.0`)
+> Stand: 2026-09-17 · Iteration 4 lokal fertig (`GoToBed-0.4.1`)
 > Zyklus: **Planen → Implementieren → Review → Self-Check → Abschluss**
 >
 > Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[-]` verworfen
@@ -114,19 +114,19 @@
 **Ziel:** Die Figuren sehen aus wie beschrieben, nicht wie Default-Mannequins.
 
 ### Tasks
-- [ ] 64×64-Skin Papa: blond, weißer Bart, Steve-wide, Minecraft-Stil
-- [ ] 64×64-Skin Mama: dunkelblond, Alex-slim, Minecraft-Stil
-- [ ] Signierte Texture-Properties erzeugen (MineSkin o. ä.) und unter `src/main/resources/skins/` ablegen
-- [ ] `ResolvableProfile` auf beide Mannequins setzen (wide vs slim)
-- [ ] Custom-Name sichtbar, keine störende Default-Description „NPC“ falls abschaltbar
+- [x] 64×64-Skin Papa: blond, weißer Bart, Steve-wide, Minecraft-Stil
+- [x] 64×64-Skin Mama: dunkelblond, Alex-slim, Minecraft-Stil
+- [x] Signierte Texture-Properties erzeugen (MineSkin o. ä.) und unter `src/main/resources/skins/` ablegen
+- [x] `ResolvableProfile` auf beide Mannequins setzen (wide vs slim)
+- [x] Custom-Name sichtbar, keine störende Default-Description „NPC“ falls abschaltbar
 
 ### Akzeptanzkriterien
-- [ ] Papa ist als blonder Mann mit weißem Bart erkennbar
+- [ ] Papa ist als blonder Mann mit weißem Bart erkennbar (Code + Skin da, noch nicht ingame)
 - [ ] Mama ist als dunkelblonde Frau erkennbar
 - [ ] Skins laden ohne Error; kein Fallback auf Steve/Alex-Default im Normalbetrieb
-- [ ] PNGs und Texture-JSON liegen in der JAR
+- [x] PNGs und Texture-JSON liegen in der JAR
 
-### Status: **Offen**
+### Status: **Lokal abgeschlossen** (`GoToBed-0.4.1.jar`) — MineSkin-signiert, eigene Profil-UUIDs, Ingame offen
 
 ---
 

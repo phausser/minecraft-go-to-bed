@@ -108,6 +108,7 @@ final class ParentPair {
         mannequin.setSilent(true);
         mannequin.setCanPickupItems(false);
         mannequin.setImmovable(true);
+        mannequin.setProfile(plugin.skins().profile(speaker));
         var pdc = mannequin.getPersistentDataContainer();
         pdc.set(keys.role, PersistentDataType.STRING, speaker.yaml());
         pdc.set(keys.target, PersistentDataType.STRING, targetUuid.toString());

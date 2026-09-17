@@ -9,6 +9,7 @@ public final class GoToBedPlugin extends JavaPlugin {
 
     private GoToBedConfig goToBedConfig;
     private GoToBedService service;
+    private ParentSkins skins;
 
     @Override
     public void onEnable() {
@@ -24,12 +25,24 @@ public final class GoToBedPlugin extends JavaPlugin {
         getConfig().options().copyDefaults(true);
         saveConfig();
 
+        try {
+            skins = ParentSkins.load(this);
+        } catch (RuntimeException e) {
+            getLogger().log(java.util.logging.Level.SEVERE, "Eltern-Skins konnten nicht geladen werden", e);
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
+
         goToBedConfig = new GoToBedConfig(this);
         service = new GoToBedService(this, goToBedConfig, new AssignmentStore(this));
         service.restore();
         getServer().getPluginManager().registerEvents(service, this);
         new GoToBedCommand(this, goToBedConfig, service).register();
         getLogger().info("GoToBed aktiv.");
+    }
+
+    ParentSkins skins() {
+        return skins;
     }
 
     @Override
