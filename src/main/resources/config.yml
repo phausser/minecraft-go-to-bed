@@ -1,0 +1,26 @@
+# GoToBed — siehe SPEC.md §5
+timezone: Europe/Berlin
+follow-interval-ticks: 2
+speak-interval-seconds: 10
+offline-clear-minutes: 10
+stand-distance: 2.0
+lateral-offset: 0.7
+max-sentence-length: 256
+
+messages:
+  scheduled: "{player} muss um {time} ins Bett. Satz: {sentence}"
+  activated: "Elternpaar ist jetzt bei {player}."
+  replaced: "Vorheriger Auftrag für {player} wurde ersetzt."
+  cancelled: "Auftrag für {player} beendet."
+  cancel-none: "{player} hat keinen GoToBed-Auftrag."
+  status-scheduled: "{player}: geplant {time} — {sentence}"
+  status-active: "{player}: aktiv — {sentence}"
+  status-offline: "{player}: aktiv, offline seit {minutes} min — {sentence}"
+  status-none: "Keine Aufträge."
+  unknown-player: "Spieler nicht gefunden: {player}"
+  invalid-time: "Uhrzeit muss HH:mm sein, z. B. 22:00."
+  empty-sentence: "Satz fehlt."
+  sentence-too-long: "Satz ist zu lang (max. {max} Zeichen)."
+  usage: "/go-to-bed <spieler> <HH:mm> <satz>"
+  chat-papa: "<Papa> {sentence}"
+  chat-mama: "<Mama> {sentence}"

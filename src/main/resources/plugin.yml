@@ -1,0 +1,15 @@
+name: GoToBed
+version: '${version}'
+main: dev.pat.gotobed.GoToBedPlugin
+description: Setzt einem Spieler ab einer Uhrzeit ein Elternpaar vor die Nase.
+api-version: "26.1"
+commands:
+  go-to-bed:
+    description: Plant oder startet das Elternpaar für einen Spieler.
+    usage: /go-to-bed <spieler> <HH:mm> <satz>
+    permission: gotobed.admin
+    aliases: [gotobed]
+permissions:
+  gotobed.admin:
+    description: Erlaubt /go-to-bed
+    default: op
