@@ -52,6 +52,19 @@ class TimeParserTest {
     }
 
     @Test
+    void splitsTimeAndSentenceWithColon() {
+        var parts = TimeParser.splitTimeAndSentence("22:10 Ab ins Bett!").orElseThrow();
+        assertEquals("22:10", parts.time());
+        assertEquals("Ab ins Bett!", parts.sentence());
+    }
+
+    @Test
+    void splitRejectsMissingSentence() {
+        assertEquals(Optional.empty(), TimeParser.splitTimeAndSentence("22:10"));
+        assertEquals(Optional.empty(), TimeParser.splitTimeAndSentence(""));
+    }
+
+    @Test
     void rejectsInvalidInput() {
         assertEquals(Optional.empty(), TimeParser.parse(null, BERLIN, NOW));
         assertEquals(Optional.empty(), TimeParser.parse("", BERLIN, NOW));

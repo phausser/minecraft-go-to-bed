@@ -56,10 +56,9 @@ final class GoToBedCommand {
                                 .executes(this::statusOne)))
                 .then(Commands.argument("player", StringArgumentType.word())
                         .suggests(this::suggestPlayers)
-                        .then(Commands.argument("time", StringArgumentType.word())
+                        .then(Commands.argument("timeAndSentence", StringArgumentType.greedyString())
                                 .suggests(this::suggestTimes)
-                                .then(Commands.argument("sentence", StringArgumentType.greedyString())
-                                        .executes(this::schedule))))
+                                .executes(this::schedule)))
                 .build();
     }
 
@@ -74,11 +73,16 @@ final class GoToBedCommand {
         if (target == null) {
             return Command.SINGLE_SUCCESS;
         }
-        String sentence = readSentence(ctx, sender);
+        var parts = TimeParser.splitTimeAndSentence(StringArgumentType.getString(ctx, "timeAndSentence"));
+        if (parts.isEmpty()) {
+            sender.sendMessage(config.emptySentence());
+            return Command.SINGLE_SUCCESS;
+        }
+        String sentence = readSentence(sender, parts.get().sentence());
         if (sentence == null) {
             return Command.SINGLE_SUCCESS;
         }
-        var parsed = TimeParser.parse(StringArgumentType.getString(ctx, "time"), config.timezone(), Instant.now());
+        var parsed = TimeParser.parse(parts.get().time(), config.timezone(), Instant.now());
         if (parsed.isEmpty()) {
             sender.sendMessage(config.invalidTime());
             return Command.SINGLE_SUCCESS;
@@ -93,7 +97,7 @@ final class GoToBedCommand {
         if (target == null) {
             return Command.SINGLE_SUCCESS;
         }
-        String sentence = readSentence(ctx, sender);
+        String sentence = readSentence(sender, StringArgumentType.getString(ctx, "sentence"));
         if (sentence == null) {
             return Command.SINGLE_SUCCESS;
         }
@@ -184,8 +188,8 @@ final class GoToBedCommand {
         return target;
     }
 
-    private String readSentence(CommandContext<CommandSourceStack> ctx, CommandSender sender) {
-        String sentence = StringArgumentType.getString(ctx, "sentence").trim();
+    private String readSentence(CommandSender sender, String raw) {
+        String sentence = raw.trim();
         if (sentence.isEmpty()) {
             sender.sendMessage(config.emptySentence());
             return null;

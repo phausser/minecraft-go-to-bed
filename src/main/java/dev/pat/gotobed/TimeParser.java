@@ -22,6 +22,28 @@ final class TimeParser {
 
     private TimeParser() {}
 
+    record ScheduleParts(String time, String sentence) {}
+
+    static Optional<ScheduleParts> splitTimeAndSentence(String rest) {
+        if (rest == null) {
+            return Optional.empty();
+        }
+        String trimmed = rest.trim();
+        int split = 0;
+        while (split < trimmed.length() && !Character.isWhitespace(trimmed.charAt(split))) {
+            split++;
+        }
+        if (split == 0 || split == trimmed.length()) {
+            return Optional.empty();
+        }
+        String time = trimmed.substring(0, split);
+        String sentence = trimmed.substring(split).trim();
+        if (sentence.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(new ScheduleParts(time, sentence));
+    }
+
     static Optional<Result> parse(String raw, ZoneId zone, Instant now) {
         if (raw == null) {
             return Optional.empty();
