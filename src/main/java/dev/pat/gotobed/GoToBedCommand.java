@@ -32,11 +32,7 @@ final class GoToBedCommand {
 
     void register() {
         plugin.getLifecycleManager().registerEventHandler(LifecycleEvents.COMMANDS, event -> {
-            event.registrar().register(
-                    build(),
-                    "Setzt einem Spieler ein Elternpaar vor die Nase.",
-                    List.of("gotobed")
-            );
+            event.registrar().register(build(), "Setzt einem Spieler ein Elternpaar vor die Nase.", List.of("gotobed"));
         });
     }
 
@@ -103,10 +99,7 @@ final class GoToBedCommand {
         }
         Instant now = Instant.now();
         var parsed = new TimeParser.Result(
-                now.atZone(config.timezone()).toLocalTime().withSecond(0).withNano(0),
-                now,
-                true
-        );
+                now.atZone(config.timezone()).toLocalTime().withSecond(0).withNano(0), now, true);
         apply(sender, target, sentence, parsed);
         return Command.SINGLE_SUCCESS;
     }
@@ -172,15 +165,11 @@ final class GoToBedCommand {
             return config.statusScheduled(
                     assignment.name(),
                     assignment.scheduledAt().atZone(config.timezone()).format(TimeParser.DISPLAY),
-                    assignment.sentence()
-            );
+                    assignment.sentence());
         }
         if (assignment.logoutAt() != null) {
             return config.statusOffline(
-                    assignment.name(),
-                    AssignmentRules.offlineMinutes(assignment, now),
-                    assignment.sentence()
-            );
+                    assignment.name(), AssignmentRules.offlineMinutes(assignment, now), assignment.sentence());
         }
         return config.statusActive(assignment.name(), assignment.sentence());
     }
@@ -210,9 +199,7 @@ final class GoToBedCommand {
     }
 
     private CompletableFuture<Suggestions> suggestPlayers(
-            CommandContext<CommandSourceStack> ctx,
-            SuggestionsBuilder builder
-    ) {
+            CommandContext<CommandSourceStack> ctx, SuggestionsBuilder builder) {
         String remaining = builder.getRemainingLowerCase();
         for (Player player : Bukkit.getOnlinePlayers()) {
             if (player.getName().toLowerCase().startsWith(remaining)) {
@@ -223,9 +210,7 @@ final class GoToBedCommand {
     }
 
     private CompletableFuture<Suggestions> suggestTimes(
-            CommandContext<CommandSourceStack> ctx,
-            SuggestionsBuilder builder
-    ) {
+            CommandContext<CommandSourceStack> ctx, SuggestionsBuilder builder) {
         String remaining = builder.getRemaining();
         int nextHour = ZonedDateTime.now(config.timezone()).getHour();
         for (int hour : new int[] {nextHour, 21, 22, 23}) {

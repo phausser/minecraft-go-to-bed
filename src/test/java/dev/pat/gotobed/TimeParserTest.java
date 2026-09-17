@@ -14,23 +14,27 @@ import org.junit.jupiter.api.Test;
 class TimeParserTest {
 
     private static final ZoneId BERLIN = ZoneId.of("Europe/Berlin");
-    private static final Instant NOW = ZonedDateTime.of(2026, 9, 17, 21, 30, 0, 0, BERLIN).toInstant();
+    private static final Instant NOW =
+            ZonedDateTime.of(2026, 9, 17, 21, 30, 0, 0, BERLIN).toInstant();
 
     @Test
     void parsesHourMinuteAndPaddedHour() {
-        assertEquals(LocalTime.of(9, 0), TimeParser.parse("9:00", BERLIN, NOW).orElseThrow().time());
-        assertEquals(LocalTime.of(9, 0), TimeParser.parse("09:00", BERLIN, NOW).orElseThrow().time());
-        assertEquals(LocalTime.of(22, 0), TimeParser.parse("22:00", BERLIN, NOW).orElseThrow().time());
+        assertEquals(
+                LocalTime.of(9, 0),
+                TimeParser.parse("9:00", BERLIN, NOW).orElseThrow().time());
+        assertEquals(
+                LocalTime.of(9, 0),
+                TimeParser.parse("09:00", BERLIN, NOW).orElseThrow().time());
+        assertEquals(
+                LocalTime.of(22, 0),
+                TimeParser.parse("22:00", BERLIN, NOW).orElseThrow().time());
     }
 
     @Test
     void futureTodayWaits() {
         TimeParser.Result result = TimeParser.parse("22:00", BERLIN, NOW).orElseThrow();
         assertFalse(result.immediate());
-        assertEquals(
-                ZonedDateTime.of(2026, 9, 17, 22, 0, 0, 0, BERLIN).toInstant(),
-                result.scheduledAt()
-        );
+        assertEquals(ZonedDateTime.of(2026, 9, 17, 22, 0, 0, 0, BERLIN).toInstant(), result.scheduledAt());
     }
 
     @Test

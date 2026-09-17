@@ -50,7 +50,9 @@ final class AssignmentStore {
             yaml.set(path + ".sentence", assignment.sentence());
             yaml.set(path + ".scheduledAt", assignment.scheduledAt().toString());
             yaml.set(path + ".status", assignment.status().yaml());
-            yaml.set(path + ".logoutAt", assignment.logoutAt() == null ? null : assignment.logoutAt().toString());
+            yaml.set(
+                    path + ".logoutAt",
+                    assignment.logoutAt() == null ? null : assignment.logoutAt().toString());
             yaml.set(path + ".nextSpeaker", assignment.nextSpeaker().yaml());
         }
         try {
@@ -90,8 +92,7 @@ final class AssignmentStore {
                 scheduledAt,
                 AssignmentStatus.fromYaml(section.getString("status")),
                 parseInstant(section.getString("logoutAt")),
-                Speaker.fromYaml(section.getString("nextSpeaker"))
-        );
+                Speaker.fromYaml(section.getString("nextSpeaker")));
     }
 
     private static Instant parseInstant(String raw) {

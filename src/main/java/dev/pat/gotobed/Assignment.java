@@ -11,8 +11,7 @@ record Assignment(
         Instant scheduledAt,
         AssignmentStatus status,
         @Nullable Instant logoutAt,
-        Speaker nextSpeaker
-) {
+        Speaker nextSpeaker) {
     static Assignment create(UUID uuid, String name, String sentence, Instant scheduledAt, boolean immediate) {
         return new Assignment(
                 uuid,
@@ -21,8 +20,7 @@ record Assignment(
                 scheduledAt,
                 immediate ? AssignmentStatus.ACTIVE : AssignmentStatus.SCHEDULED,
                 null,
-                Speaker.PAPA
-        );
+                Speaker.PAPA);
     }
 
     Assignment activate() {

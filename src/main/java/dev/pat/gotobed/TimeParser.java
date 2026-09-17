@@ -20,8 +20,7 @@ final class TimeParser {
         }
     }
 
-    private TimeParser() {
-    }
+    private TimeParser() {}
 
     static Optional<Result> parse(String raw, ZoneId zone, Instant now) {
         if (raw == null) {

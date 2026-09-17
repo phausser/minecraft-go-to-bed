@@ -46,16 +46,16 @@ class AssignmentRulesTest {
 
     @Test
     void offlineTimerClearsAtTenMinutes() {
-        Assignment assignment = Assignment.create(ID, "Pat", "ins Bett", NOW, true)
-                .withLogout(NOW.minus(Duration.ofMinutes(10)));
+        Assignment assignment =
+                Assignment.create(ID, "Pat", "ins Bett", NOW, true).withLogout(NOW.minus(Duration.ofMinutes(10)));
         assertTrue(AssignmentRules.shouldClearOffline(assignment, NOW, TEN_MIN));
         assertEquals(10L, AssignmentRules.offlineMinutes(assignment, NOW));
     }
 
     @Test
     void offlineTimerKeepsAtNineMinutes() {
-        Assignment assignment = Assignment.create(ID, "Pat", "ins Bett", NOW, true)
-                .withLogout(NOW.minus(Duration.ofMinutes(9)));
+        Assignment assignment =
+                Assignment.create(ID, "Pat", "ins Bett", NOW, true).withLogout(NOW.minus(Duration.ofMinutes(9)));
         assertFalse(AssignmentRules.shouldClearOffline(assignment, NOW, TEN_MIN));
         assertEquals(9L, AssignmentRules.offlineMinutes(assignment, NOW));
     }
@@ -73,8 +73,8 @@ class AssignmentRulesTest {
 
     @Test
     void rejoinBeforeTimeoutClearsLogoutStamp() {
-        Assignment offline = Assignment.create(ID, "Pat", "ins Bett", NOW, true)
-                .withLogout(NOW.minus(Duration.ofMinutes(2)));
+        Assignment offline =
+                Assignment.create(ID, "Pat", "ins Bett", NOW, true).withLogout(NOW.minus(Duration.ofMinutes(2)));
         Assignment resumed = AssignmentRules.onJoinResume(offline);
         assertNull(resumed.logoutAt());
         assertEquals(AssignmentStatus.ACTIVE, resumed.status());
@@ -85,19 +85,14 @@ class AssignmentRulesTest {
     void restoreActivatesDueAndDropsExpiredOffline() {
         Assignment future = Assignment.create(ID, "Future", "warten", NOW.plusSeconds(120), false);
         Assignment due = Assignment.create(
-                UUID.fromString("22222222-2222-2222-2222-222222222222"),
-                "Due",
-                "jetzt",
-                NOW.minusSeconds(5),
-                false
-        );
+                UUID.fromString("22222222-2222-2222-2222-222222222222"), "Due", "jetzt", NOW.minusSeconds(5), false);
         Assignment expired = Assignment.create(
-                UUID.fromString("33333333-3333-3333-3333-333333333333"),
-                "Gone",
-                "weg",
-                NOW.minusSeconds(60),
-                true
-        ).withLogout(NOW.minus(Duration.ofMinutes(11)));
+                        UUID.fromString("33333333-3333-3333-3333-333333333333"),
+                        "Gone",
+                        "weg",
+                        NOW.minusSeconds(60),
+                        true)
+                .withLogout(NOW.minus(Duration.ofMinutes(11)));
 
         List<Assignment> restored = AssignmentRules.restore(List.of(future, due, expired), NOW, TEN_MIN);
         assertEquals(2, restored.size());

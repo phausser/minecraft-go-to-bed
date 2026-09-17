@@ -1,5 +1,6 @@
 plugins {
     java
+    id("com.diffplug.spotless") version "8.10.2"
 }
 
 group = "dev.pat"
@@ -44,4 +45,21 @@ tasks.processResources {
 
 tasks.jar {
     archiveBaseName.set("GoToBed")
+}
+
+spotless {
+    encoding("UTF-8")
+    java {
+        palantirJavaFormat()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+        target("src/**/*.java")
+    }
+}
+
+tasks.register("lint") {
+    group = "verification"
+    description = "Run style checks (Spotless)."
+    dependsOn("spotlessCheck")
 }

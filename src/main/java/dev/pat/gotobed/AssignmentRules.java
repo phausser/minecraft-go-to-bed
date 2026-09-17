@@ -11,8 +11,7 @@ import java.util.UUID;
 
 final class AssignmentRules {
 
-    private AssignmentRules() {
-    }
+    private AssignmentRules() {}
 
     static boolean shouldActivate(Assignment assignment, Instant now) {
         return assignment.status() == AssignmentStatus.SCHEDULED

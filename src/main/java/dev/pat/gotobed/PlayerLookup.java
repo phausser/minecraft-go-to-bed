@@ -7,8 +7,7 @@ import org.jspecify.annotations.Nullable;
 
 final class PlayerLookup {
 
-    private PlayerLookup() {
-    }
+    private PlayerLookup() {}
 
     static @Nullable OfflinePlayer findKnown(String name) {
         Player online = Bukkit.getPlayerExact(name);

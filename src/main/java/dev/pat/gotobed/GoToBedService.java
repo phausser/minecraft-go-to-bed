@@ -47,19 +47,13 @@ final class GoToBedService implements Listener {
 
     Optional<Assignment> assign(OfflinePlayer target, String displayName, String sentence, TimeParser.Result time) {
         cancelTasks(target.getUniqueId());
-        Assignment next = Assignment.create(
-                target.getUniqueId(),
-                displayName,
-                sentence,
-                time.scheduledAt(),
-                time.immediate()
-        );
+        Assignment next =
+                Assignment.create(target.getUniqueId(), displayName, sentence, time.scheduledAt(), time.immediate());
         Assignment previous = assignments.put(next.uuid(), next);
-        plugin.getLogger().info(
-                "Auftrag für " + displayName + " (" + next.uuid() + "): "
+        plugin.getLogger()
+                .info("Auftrag für " + displayName + " (" + next.uuid() + "): "
                         + (time.immediate() ? "sofort" : "um " + time.display())
-                        + " — " + sentence
-        );
+                        + " — " + sentence);
         arm(next);
         persist();
         return Optional.ofNullable(previous);
@@ -156,8 +150,8 @@ final class GoToBedService implements Listener {
         Instant now = Instant.now();
         long delayMs = Math.max(0L, assignment.scheduledAt().toEpochMilli() - now.toEpochMilli());
         long ticks = Math.max(1L, delayMs / 50L);
-        BukkitTask task = plugin.getServer().getScheduler()
-                .runTaskLater(plugin, () -> activateDue(assignment.uuid()), ticks);
+        BukkitTask task =
+                plugin.getServer().getScheduler().runTaskLater(plugin, () -> activateDue(assignment.uuid()), ticks);
         activationTasks.put(assignment.uuid(), task);
     }
 
@@ -185,13 +179,18 @@ final class GoToBedService implements Listener {
         Instant deadline = logoutAt.plus(offlineTimeout());
         long delayMs = Math.max(0L, deadline.toEpochMilli() - Instant.now().toEpochMilli());
         long ticks = Math.max(1L, delayMs / 50L);
-        BukkitTask task = plugin.getServer().getScheduler()
-                .runTaskLater(plugin, () -> {
-                    Assignment current = assignments.get(assignment.uuid());
-                    if (current != null && AssignmentRules.shouldClearOffline(current, Instant.now(), offlineTimeout())) {
-                        clear(current.uuid(), "10 Minuten offline");
-                    }
-                }, ticks);
+        BukkitTask task = plugin.getServer()
+                .getScheduler()
+                .runTaskLater(
+                        plugin,
+                        () -> {
+                            Assignment current = assignments.get(assignment.uuid());
+                            if (current != null
+                                    && AssignmentRules.shouldClearOffline(current, Instant.now(), offlineTimeout())) {
+                                clear(current.uuid(), "10 Minuten offline");
+                            }
+                        },
+                        ticks);
         clearTasks.put(assignment.uuid(), task);
     }
 
@@ -199,14 +198,20 @@ final class GoToBedService implements Listener {
         cancel(speakTasks, assignment.uuid());
         speakOnce(player);
         long period = config.speakIntervalSeconds() * 20L;
-        BukkitTask task = plugin.getServer().getScheduler().runTaskTimer(plugin, () -> {
-            Player online = Bukkit.getPlayer(assignment.uuid());
-            if (online == null || !online.isOnline()) {
-                cancel(speakTasks, assignment.uuid());
-                return;
-            }
-            speakOnce(online);
-        }, period, period);
+        BukkitTask task = plugin.getServer()
+                .getScheduler()
+                .runTaskTimer(
+                        plugin,
+                        () -> {
+                            Player online = Bukkit.getPlayer(assignment.uuid());
+                            if (online == null || !online.isOnline()) {
+                                cancel(speakTasks, assignment.uuid());
+                                return;
+                            }
+                            speakOnce(online);
+                        },
+                        period,
+                        period);
         speakTasks.put(assignment.uuid(), task);
     }
 
