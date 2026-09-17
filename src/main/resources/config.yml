@@ -21,6 +21,6 @@ messages:
   invalid-time: "Uhrzeit muss HH:mm sein, z. B. 22:00."
   empty-sentence: "Satz fehlt."
   sentence-too-long: "Satz ist zu lang (max. {max} Zeichen)."
-  usage: "/go-to-bed <spieler> <HH:mm> <satz>"
+  usage: "/go-to-bed <HH:mm> <spieler> <satz>"
   chat-papa: "<Papa> {sentence}"
   chat-mama: "<Mama> {sentence}"

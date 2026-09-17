@@ -7,7 +7,7 @@ Zielserver: Paper **26.1.2**, Java **25**. Permission `gotobed.admin` (default o
 ## Befehle
 
 ```
-/go-to-bed <spieler> <HH:mm> <satz>
+/go-to-bed <HH:mm> <spieler> <satz>
 /go-to-bed now <spieler> <satz>
 /go-to-bed cancel <spieler>
 /go-to-bed status [spieler]

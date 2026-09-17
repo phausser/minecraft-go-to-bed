@@ -22,26 +22,37 @@ final class TimeParser {
 
     private TimeParser() {}
 
-    record ScheduleParts(String time, String sentence) {}
+    record ScheduleParts(String time, String player, String sentence) {}
 
-    static Optional<ScheduleParts> splitTimeAndSentence(String rest) {
+    static Optional<ScheduleParts> splitSchedule(String rest) {
         if (rest == null) {
             return Optional.empty();
         }
         String trimmed = rest.trim();
-        int split = 0;
-        while (split < trimmed.length() && !Character.isWhitespace(trimmed.charAt(split))) {
-            split++;
-        }
-        if (split == 0 || split == trimmed.length()) {
+        int timeEnd = tokenEnd(trimmed, 0);
+        if (timeEnd <= 0 || timeEnd == trimmed.length()) {
             return Optional.empty();
         }
-        String time = trimmed.substring(0, split);
-        String sentence = trimmed.substring(split).trim();
-        if (sentence.isEmpty()) {
+        String time = trimmed.substring(0, timeEnd);
+        String afterTime = trimmed.substring(timeEnd).trim();
+        int playerEnd = tokenEnd(afterTime, 0);
+        if (playerEnd <= 0 || playerEnd == afterTime.length()) {
             return Optional.empty();
         }
-        return Optional.of(new ScheduleParts(time, sentence));
+        String player = afterTime.substring(0, playerEnd);
+        String sentence = afterTime.substring(playerEnd).trim();
+        if (player.isEmpty() || sentence.isEmpty()) {
+            return Optional.empty();
+        }
+        return Optional.of(new ScheduleParts(time, player, sentence));
+    }
+
+    private static int tokenEnd(String s, int from) {
+        int i = from;
+        while (i < s.length() && !Character.isWhitespace(s.charAt(i))) {
+            i++;
+        }
+        return i;
     }
 
     static Optional<Result> parse(String raw, ZoneId zone, Instant now) {

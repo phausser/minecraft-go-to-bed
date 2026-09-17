@@ -6,7 +6,7 @@ api-version: "26.1"
 commands:
   go-to-bed:
     description: Plant oder startet das Elternpaar für einen Spieler.
-    usage: /go-to-bed <spieler> <HH:mm> <satz>
+    usage: /go-to-bed <HH:mm> <spieler> <satz>
     permission: gotobed.admin
     aliases: [gotobed]
 permissions:

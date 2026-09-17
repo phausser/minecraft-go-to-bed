@@ -29,7 +29,7 @@ Der Server ist **nicht** 1.21.0. Bestehende Plugins (SimpleRTP, SimpleHome, …)
 
 ## 3. Ablauf
 
-1. Admin (OP oder Permission) schreibt `/go-to-bed <spieler> <HH:mm> <satz>`.
+1. Admin (OP oder Permission) schreibt `/go-to-bed <HH:mm> <spieler> <satz>`.
 2. Plugin merkt sich Auftrag: Ziel-UUID, Satz, geplante Uhrzeit, Status `scheduled`.
 3. Liegt `HH:mm` **heute noch in der Zukunft** → warten. Liegt sie **jetzt oder in der Vergangenheit** → Status `active`, Eltern spawnen (Spieler online) bzw. beim nächsten Join.
 4. Solange `active` und Spieler online:
@@ -48,7 +48,7 @@ Im Bett schlafen, Sterben, Weltwechsel, `/kill`, Gamemode-Wechsel beenden den Au
 
 | Punkt | Regel |
 |---|---|
-| Hauptbefehl | `/go-to-bed <spieler> <HH:mm> <satz>` |
+| Hauptbefehl | `/go-to-bed <HH:mm> <spieler> <satz>` |
 | Sofort | `/go-to-bed now <spieler> <satz>` |
 | Abbruch | `/go-to-bed cancel <spieler>` |
 | Status | `/go-to-bed status [spieler]` — ohne Argument: alle aktiven/geplanten |
@@ -214,7 +214,7 @@ Spieler- und Admin-Texte auf Deutsch, über `messages.*` überschreibbar.
 | Ungültige Zeit | `Uhrzeit muss HH:mm sein, z. B. 22:00.` |
 | Leerer Satz | `Satz fehlt.` |
 | Satz zu lang | `Satz ist zu lang (max. {max} Zeichen).` |
-| Usage | `/go-to-bed <spieler> <HH:mm> <satz>` |
+| Usage | `/go-to-bed <HH:mm> <spieler> <satz>` |
 | Chat Papa | `<Papa> {sentence}` |
 | Chat Mama | `<Mama> {sentence}` |
 | Keine Permission | Standard-Paper-Meldung reicht |
@@ -353,7 +353,7 @@ Config nach dem ersten Enable: `/home/pat/minecraft-server/plugins/GoToBed/confi
 
 ## 10. Akzeptanzkriterien (v1)
 
-- [ ] `/go-to-bed <spieler> <HH:mm> <satz>` ist nur mit `gotobed.admin` (default op) nutzbar
+- [ ] `/go-to-bed <HH:mm> <spieler> <satz>` ist nur mit `gotobed.admin` (default op) nutzbar
 - [ ] Uhrzeit `HH:mm` gilt für heute, Europe/Berlin; liegt sie in der Vergangenheit, starten die Eltern sofort
 - [ ] `/go-to-bed now <spieler> <satz>` startet ohne Wartezeit
 - [ ] Ab der Aktivierung stehen zwei Mannequins (Papa blond + weißer Bart, Mama dunkelblond) vor dem Spieler

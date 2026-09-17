@@ -111,7 +111,7 @@ final class GoToBedConfig {
     }
 
     String usage() {
-        return msg("usage", "/go-to-bed <spieler> <HH:mm> <satz>");
+        return msg("usage", "/go-to-bed <HH:mm> <spieler> <satz>");
     }
 
     String chatPapa(String sentence) {

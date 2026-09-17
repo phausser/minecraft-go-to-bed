@@ -54,11 +54,9 @@ final class GoToBedCommand {
                         .then(Commands.argument("player", StringArgumentType.word())
                                 .suggests(this::suggestPlayers)
                                 .executes(this::statusOne)))
-                .then(Commands.argument("player", StringArgumentType.word())
-                        .suggests(this::suggestPlayers)
-                        .then(Commands.argument("timeAndSentence", StringArgumentType.greedyString())
-                                .suggests(this::suggestTimes)
-                                .executes(this::schedule)))
+                .then(Commands.argument("schedule", StringArgumentType.greedyString())
+                        .suggests(this::suggestTimes)
+                        .executes(this::schedule))
                 .build();
     }
 
@@ -69,20 +67,21 @@ final class GoToBedCommand {
 
     private int schedule(CommandContext<CommandSourceStack> ctx) {
         CommandSender sender = ctx.getSource().getSender();
-        OfflinePlayer target = resolvePlayer(ctx, sender);
+        var parts = TimeParser.splitSchedule(StringArgumentType.getString(ctx, "schedule"));
+        if (parts.isEmpty()) {
+            sender.sendMessage(config.usage());
+            return Command.SINGLE_SUCCESS;
+        }
+        TimeParser.ScheduleParts schedule = parts.get();
+        OfflinePlayer target = resolvePlayer(sender, schedule.player());
         if (target == null) {
             return Command.SINGLE_SUCCESS;
         }
-        var parts = TimeParser.splitTimeAndSentence(StringArgumentType.getString(ctx, "timeAndSentence"));
-        if (parts.isEmpty()) {
-            sender.sendMessage(config.emptySentence());
-            return Command.SINGLE_SUCCESS;
-        }
-        String sentence = readSentence(sender, parts.get().sentence());
+        String sentence = readSentence(sender, schedule.sentence());
         if (sentence == null) {
             return Command.SINGLE_SUCCESS;
         }
-        var parsed = TimeParser.parse(parts.get().time(), config.timezone(), Instant.now());
+        var parsed = TimeParser.parse(schedule.time(), config.timezone(), Instant.now());
         if (parsed.isEmpty()) {
             sender.sendMessage(config.invalidTime());
             return Command.SINGLE_SUCCESS;
@@ -93,7 +92,7 @@ final class GoToBedCommand {
 
     private int now(CommandContext<CommandSourceStack> ctx) {
         CommandSender sender = ctx.getSource().getSender();
-        OfflinePlayer target = resolvePlayer(ctx, sender);
+        OfflinePlayer target = resolvePlayer(sender, StringArgumentType.getString(ctx, "player"));
         if (target == null) {
             return Command.SINGLE_SUCCESS;
         }
@@ -110,11 +109,12 @@ final class GoToBedCommand {
 
     private int cancel(CommandContext<CommandSourceStack> ctx) {
         CommandSender sender = ctx.getSource().getSender();
-        OfflinePlayer target = resolvePlayer(ctx, sender);
+        String name = StringArgumentType.getString(ctx, "player");
+        OfflinePlayer target = resolvePlayer(sender, name);
         if (target == null) {
             return Command.SINGLE_SUCCESS;
         }
-        String display = PlayerLookup.displayName(target, StringArgumentType.getString(ctx, "player"));
+        String display = PlayerLookup.displayName(target, name);
         if (service.cancel(target.getUniqueId()).isEmpty()) {
             sender.sendMessage(config.cancelNone(display));
             return Command.SINGLE_SUCCESS;
@@ -139,11 +139,12 @@ final class GoToBedCommand {
 
     private int statusOne(CommandContext<CommandSourceStack> ctx) {
         CommandSender sender = ctx.getSource().getSender();
-        OfflinePlayer target = resolvePlayer(ctx, sender);
+        String name = StringArgumentType.getString(ctx, "player");
+        OfflinePlayer target = resolvePlayer(sender, name);
         if (target == null) {
             return Command.SINGLE_SUCCESS;
         }
-        String display = PlayerLookup.displayName(target, StringArgumentType.getString(ctx, "player"));
+        String display = PlayerLookup.displayName(target, name);
         var assignment = service.get(target.getUniqueId());
         if (assignment.isEmpty()) {
             sender.sendMessage(config.cancelNone(display));
@@ -178,8 +179,7 @@ final class GoToBedCommand {
         return config.statusActive(assignment.name(), assignment.sentence());
     }
 
-    private OfflinePlayer resolvePlayer(CommandContext<CommandSourceStack> ctx, CommandSender sender) {
-        String name = StringArgumentType.getString(ctx, "player");
+    private OfflinePlayer resolvePlayer(CommandSender sender, String name) {
         OfflinePlayer target = PlayerLookup.findKnown(name);
         if (target == null) {
             sender.sendMessage(config.unknownPlayer(name));

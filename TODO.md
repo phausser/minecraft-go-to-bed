@@ -69,7 +69,7 @@
 - [x] JUnit: Zeit-Parsing, sofort-vs-warten, Offline-10-min, Replace
 
 ### Akzeptanzkriterien
-- [ ] `/go-to-bed Spieler 22:00 Satz` speichert den Auftrag über Neustart (Code + `data.yml` da, noch nicht ingame)
+- [ ] `/go-to-bed 22:00 Spieler Satz` speichert den Auftrag über Neustart (Code + `data.yml` da, noch nicht ingame)
 - [x] Vergangenheit oder `now` setzt Status `active` ohne zu warten (Unit-Test)
 - [x] Zukunft wartet bis `HH:mm` (heute) (Unit-Test)
 - [x] Quit + 10 min → Auftrag weg (auch wenn der Spieler offline bleibt) (Unit-Test)
@@ -149,7 +149,7 @@
 - [ ] Plugin startet auf Paper 26.1.2 ohne Error
 
 ### Ingame-Checkliste
-- [ ] OP: `/go-to-bed <online> 22:00 Testsatz` (oder `now`) spawnt Eltern
+- [ ] OP: `/go-to-bed 22:00 <online> Testsatz` (oder `now`) spawnt Eltern
 - [ ] Nicht-OP: Befehl abgelehnt
 - [ ] Eltern stehen vor dem Opfer, andere sehen sie, Opfer bleibt an ihnen hängen
 - [ ] Chat nur beim Opfer, alle 10 s, Papa/Mama im Wechsel
