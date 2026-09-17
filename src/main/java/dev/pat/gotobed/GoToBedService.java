@@ -8,12 +8,17 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import org.bukkit.Bukkit;
+import org.bukkit.NamespacedKey;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.entity.Mannequin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitTask;
 
 final class GoToBedService implements Listener {
@@ -22,17 +27,21 @@ final class GoToBedService implements Listener {
     private final GoToBedConfig config;
     private final AssignmentStore store;
     private final ConcurrentHashMap<UUID, Assignment> assignments = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<UUID, ParentPair> pairs = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, BukkitTask> activationTasks = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, BukkitTask> speakTasks = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, BukkitTask> clearTasks = new ConcurrentHashMap<>();
+    private final NamespacedKey targetKey;
 
     GoToBedService(GoToBedPlugin plugin, GoToBedConfig config, AssignmentStore store) {
         this.plugin = plugin;
         this.config = config;
         this.store = store;
+        this.targetKey = new NamespacedKey(plugin, "target");
     }
 
     void restore() {
+        ParentPair.removeTagged(plugin);
         Instant now = Instant.now();
         Duration timeout = offlineTimeout();
         List<Assignment> restored = AssignmentRules.restore(store.load(), now, timeout);
@@ -84,6 +93,7 @@ final class GoToBedService implements Listener {
         for (UUID uuid : List.copyOf(assignments.keySet())) {
             cancelTasks(uuid);
         }
+        ParentPair.removeTagged(plugin);
         persist();
     }
 
@@ -107,7 +117,7 @@ final class GoToBedService implements Listener {
         cancel(clearTasks, resumed.uuid());
         persist();
         if (resumed.status() == AssignmentStatus.ACTIVE) {
-            startSpeak(player, resumed);
+            startPresence(player, resumed);
         }
     }
 
@@ -118,6 +128,7 @@ final class GoToBedService implements Listener {
         if (assignment == null) {
             return;
         }
+        despawnPair(uuid);
         cancel(speakTasks, uuid);
         Assignment updated = AssignmentRules.onQuit(assignment, Instant.now());
         assignments.put(uuid, updated);
@@ -138,7 +149,7 @@ final class GoToBedService implements Listener {
         }
         Player player = Bukkit.getPlayer(assignment.uuid());
         if (player != null && player.isOnline()) {
-            startSpeak(player, assignment);
+            startPresence(player, assignment);
             return;
         }
         if (assignment.logoutAt() != null) {
@@ -167,7 +178,7 @@ final class GoToBedService implements Listener {
         plugin.getLogger().info("Auftrag aktiv: " + active.name());
         Player player = Bukkit.getPlayer(uuid);
         if (player != null && player.isOnline()) {
-            startSpeak(player, active);
+            startPresence(player, active);
         }
     }
 
@@ -192,6 +203,33 @@ final class GoToBedService implements Listener {
                         },
                         ticks);
         clearTasks.put(assignment.uuid(), task);
+    }
+
+    @EventHandler
+    public void onWorldChange(PlayerChangedWorldEvent event) {
+        Player player = event.getPlayer();
+        Assignment assignment = assignments.get(player.getUniqueId());
+        if (assignment == null || assignment.status() != AssignmentStatus.ACTIVE) {
+            return;
+        }
+        ParentPair pair = pairs.get(player.getUniqueId());
+        if (pair != null) {
+            pair.start(player);
+        }
+    }
+
+    @EventHandler
+    public void onMannequinDamage(EntityDamageEvent event) {
+        if (event.getEntity() instanceof Mannequin mannequin
+                && mannequin.getPersistentDataContainer().has(targetKey, PersistentDataType.STRING)) {
+            event.setCancelled(true);
+        }
+    }
+
+    private void startPresence(Player player, Assignment assignment) {
+        ParentPair pair = pairs.computeIfAbsent(assignment.uuid(), id -> new ParentPair(plugin, config, id));
+        pair.start(player);
+        startSpeak(player, assignment);
     }
 
     private void startSpeak(Player player, Assignment assignment) {
@@ -221,10 +259,15 @@ final class GoToBedService implements Listener {
             cancel(speakTasks, player.getUniqueId());
             return;
         }
-        String line = assignment.nextSpeaker() == Speaker.PAPA
+        Speaker speaker = assignment.nextSpeaker();
+        String line = speaker == Speaker.PAPA
                 ? config.chatPapa(assignment.sentence())
                 : config.chatMama(assignment.sentence());
         player.sendMessage(line);
+        ParentPair pair = pairs.get(player.getUniqueId());
+        if (pair != null) {
+            pair.swing(speaker);
+        }
         assignments.put(assignment.uuid(), assignment.spoken());
     }
 
@@ -249,6 +292,14 @@ final class GoToBedService implements Listener {
         cancel(activationTasks, uuid);
         cancel(speakTasks, uuid);
         cancel(clearTasks, uuid);
+        despawnPair(uuid);
+    }
+
+    private void despawnPair(UUID uuid) {
+        ParentPair pair = pairs.remove(uuid);
+        if (pair != null) {
+            pair.despawn();
+        }
     }
 
     private static void cancel(ConcurrentHashMap<UUID, BukkitTask> tasks, UUID uuid) {

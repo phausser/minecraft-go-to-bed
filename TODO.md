@@ -1,6 +1,6 @@
 # GoToBed — TODO
 
-> Stand: 2026-09-17 · v1 spezifiziert, noch nicht implementiert
+> Stand: 2026-09-17 · Iteration 3 lokal fertig (`GoToBed-0.3.0`)
 > Zyklus: **Planen → Implementieren → Review → Self-Check → Abschluss**
 >
 > Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[-]` verworfen
@@ -49,7 +49,7 @@
 - [ ] OP bekommt Usage bzw. Ablehnung/Bestätigung laut SPEC §6
 - [ ] Kein Error im Paper-Log beim Enable
 
-### Status: **In Arbeit** — lokal gebaut (`GoToBed-0.1.0.jar`), noch nicht auf pfefferminz
+### Status: **Lokal abgeschlossen** — Command in 0.3.0 enthalten, noch nicht auf pfefferminz
 
 ---
 
@@ -86,26 +86,26 @@
 **Ziel:** Papa und Mama stehen wirklich vor dem Spieler, blockieren, sprechen nur das Opfer an.
 
 ### Tasks
-- [ ] `ParentPair`: zwei `Mannequin` spawnen, PDC-Tag, Namen Papa/Mama
-- [ ] Flags: invulnerable, keine KI, keine Gravity, `removeWhenFarAway=false`, **collidable**
-- [ ] Follow-Task alle `follow-interval-ticks`: 2 Blöcke vor Yaw, Papa links / Mama rechts, `lookAt` Spieler
-- [ ] Dimension-/Vehicle-/Flug-Wechsel mitgehen
-- [ ] Verschwundene Entity beim nächsten Tick neu spawnen
-- [ ] Speak-Task: sofort, dann alle 10 s, nur Opfer, Wechsel Papa/Mama, Format SPEC §6
-- [ ] Armschwung am Sprecher, falls Mannequin das hergibt; sonst weglassen
-- [ ] Enable: getaggte Rest-Mannequins in geladenen Welten entfernen, dann Paare aus Store spawnen
-- [ ] Disable / cancel / clear: beide Entities entfernen
-- [ ] Default-Mannequin-Skin vorerst akzeptabel (eigene Skins kommen in Iteration 4)
+- [x] `ParentPair`: zwei `Mannequin` spawnen, PDC-Tag, Namen Papa/Mama
+- [x] Flags: invulnerable, keine KI, keine Gravity, `removeWhenFarAway=false`, **collidable**
+- [x] Follow-Task alle `follow-interval-ticks`: 2 Blöcke vor Yaw, Papa links / Mama rechts, `lookAt` Spieler
+- [x] Dimension-/Vehicle-/Flug-Wechsel mitgehen
+- [x] Verschwundene Entity beim nächsten Tick neu spawnen
+- [x] Speak-Task: sofort, dann alle 10 s, nur Opfer, Wechsel Papa/Mama, Format SPEC §6
+- [x] Armschwung am Sprecher, falls Mannequin das hergibt; sonst weglassen
+- [x] Enable: getaggte Rest-Mannequins in geladenen Welten entfernen, dann Paare aus Store spawnen
+- [x] Disable / cancel / clear: beide Entities entfernen
+- [x] Default-Mannequin-Skin vorerst akzeptabel (eigene Skins kommen in Iteration 4)
 
 ### Akzeptanzkriterien
-- [ ] Ab `active` stehen zwei Mannequins vor dem Spieler und folgen ihm
+- [ ] Ab `active` stehen zwei Mannequins vor dem Spieler und folgen ihm (Code da, noch nicht ingame)
 - [ ] Andere Spieler sehen sie
 - [ ] Opfer läuft gegen sie (Kollision)
 - [ ] Nur das Opfer sieht `<Papa>` / `<Mama>` im 10-s-Takt, erste Zeile sofort
 - [ ] Weltwechsel: Eltern sind in der neuen Welt wieder vor ihm
 - [ ] Cancel despawnt beide; keine verwaisten Mannequins nach Disable
 
-### Status: **Offen**
+### Status: **Lokal abgeschlossen** (`GoToBed-0.3.0.jar`) — Follow-Position unit-getestet, Ingame offen
 
 ---
 
