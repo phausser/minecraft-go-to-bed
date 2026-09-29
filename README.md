@@ -4,6 +4,8 @@ Paper-Plugin: `/go-to-bed` setzt einem Spieler ab einer Uhrzeit Papa und Mama vo
 
 Zielserver: Paper **26.1.2**, Java **25**. Permission `gotobed.admin` (default op). Details: [SPEC.md](SPEC.md).
 
+Stand 2026-09-29: **0.4.3** lokal gebaut, 26 Tests und Formatprüfung bestanden. Papa und Mama erscheinen laut Ingame-Test korrekt. Die Installation von 0.4.3 sowie die Offline- und übrigen Verhaltenstests sind noch nicht bestätigt; Details in [TODO.md](TODO.md).
+
 ## Befehle
 
 ```
@@ -23,7 +25,7 @@ Zielserver: Paper **26.1.2**, Java **25**. Permission `gotobed.admin` (default o
 
 JAR: `build/libs/GoToBed-<version>.jar`
 
-Der Build führt auch Tests und die Formatprüfung aus. Die Skin-Tests prüfen unter anderem, dass Papa und Mama unterschiedliche Texturen mit den passenden Modellen verwenden. Die tatsächliche Darstellung muss zusätzlich im Spiel geprüft werden.
+Der Build führt auch Tests und die Formatprüfung aus. Die Skin-Tests prüfen unter anderem, dass Papa und Mama unterschiedliche Texturen mit den passenden Modellen verwenden. Die tatsächliche Darstellung wurde am 2026-09-29 vom Nutzer im Spiel bestätigt.
 
 ## Figuren prüfen
 

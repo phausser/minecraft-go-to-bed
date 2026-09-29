@@ -1,6 +1,6 @@
 # GoToBed — TODO
 
-> Stand: 2026-09-29 · `GoToBed-0.4.3` lokal gebaut; auf pfefferminz zuletzt 0.4.2 geprüft; Sichtprüfung im Spiel offen
+> Stand: 2026-09-29 · `GoToBed-0.4.3` lokal gebaut; auf pfefferminz zuletzt 0.4.2 geprüft; Papa/Mama im Spiel vom Nutzer bestätigt; übrige Ingame-Prüfungen offen
 > Zyklus: **Planen → Implementieren → Review → Self-Check → Abschluss**
 >
 > Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[-]` verworfen
@@ -49,7 +49,7 @@
 - [ ] OP bekommt Usage bzw. Ablehnung/Bestätigung laut SPEC §6
 - [ ] Kein Error im Paper-Log beim Enable
 
-### Status: **Lokal abgeschlossen** — Command in 0.3.0 enthalten, noch nicht auf pfefferminz
+### Status: **Lokal abgeschlossen** — Command seit 0.3.0 enthalten; Plugin später auf pfefferminz installiert
 
 ---
 
@@ -121,12 +121,12 @@
 - [x] Custom-Name sichtbar, keine störende Default-Description „NPC“ falls abschaltbar
 
 ### Akzeptanzkriterien
-- [ ] Papa ist als blonder Mann mit weißem Bart erkennbar (Code + Skin da, noch nicht ingame)
-- [ ] Mama ist als dunkelblonde Frau erkennbar
+- [x] Papa erscheint als eigene Figur (Nutzerbestätigung 2026-09-29; blond/weißer Bart zusätzlich an den Texturen geprüft)
+- [x] Mama erscheint als eigene Figur (Nutzerbestätigung 2026-09-29; dunkelblond zusätzlich an der Textur geprüft)
 - [ ] Skins laden ohne Error; kein Fallback auf Steve/Alex-Default im Normalbetrieb
 - [x] PNGs und Texture-JSON liegen in der JAR
 
-### Status: **Lokal abgeschlossen** (`GoToBed-0.4.1.jar`) — MineSkin-signiert, eigene Profil-UUIDs, Ingame offen
+### Status: **Lokal abgeschlossen** (`GoToBed-0.4.1.jar`) — MineSkin-signiert, eigene Profil-UUIDs; Papa/Mama ingame am 2026-09-29 bestätigt, Logprüfung offen
 
 ---
 
@@ -170,7 +170,7 @@
 - Die Bilder wurden von `textures.minecraft.net` abgerufen und visuell geprüft: Papa blond mit weißem Bart, Mama dunkelblond ohne Bart. Die heruntergeladenen Bilder stimmen pixelgenau mit den jeweiligen PNGs im Projekt überein.
 - Regressionstests prüfen unterschiedliche Textur-Adressen und Payload-Profil-IDs, die Modellzuordnung, decodierbare Texture-/Signaturdaten, URL-Konsistenz, 64×64-PNGs und Papas Bart. Sie prüfen weder die Signatur kryptografisch noch die Darstellung im Minecraft-Client.
 - Kein reproduzierter Darstellungsfehler, daher keine Änderung am Laufzeitcode und kein Server-Neustart im Rahmen dieser Untersuchung.
-- Noch offen: Im Spiel `/go-to-bed now <spieler> Testsatz` ausführen und beide Figuren nach dem Laden der Skins ansehen. Papa: blaues Oberteil, braune Hose, weißer Bart. Mama: rotes Oberteil, blaue Hose, kein Bart. Bei erneutem Fehler die sichtbaren Namen und das Aussehen festhalten; damit lässt sich ein falscher Skin von einem Standardskin bei fehlgeschlagenem Laden unterscheiden.
+- Ergebnis vom 2026-09-29: Nutzer bestätigt „es erscheinen papa und mama. das funktioniert“. Die doppelte Frauenfigur ist im aktuellen Test nicht mehr aufgetreten. Die dabei eingesetzte Plugin-Version wurde nicht angegeben; eine Installation von 0.4.3 ist dadurch nicht bestätigt.
 
 ### Timerkorrektur 0.4.3 (2026-09-29)
 
@@ -179,7 +179,7 @@
 - Offline-Timer planen eine erneute Prüfung, wenn die Frist noch nicht abgelaufen ist. Bisher konnte ein knapp zu früher Callback den Auftrag ohne weiteren Timer zurücklassen.
 - Beim Ersetzen eines Timers wird der vorherige Task abgebrochen; eine Aktivierung beim Join entfernt den noch geplanten Start-Task.
 - Vier zusätzliche Tests prüfen Tick-Grenzen, überfällige Fristen und die Restwartezeit nach einer frühen Offline-Prüfung. Die Tests simulieren keinen laufenden Paper-Scheduler.
-- Installation von 0.4.3 und Ingame-Abnahme bleiben offen.
+- Installation von 0.4.3 und Ingame-Prüfung der Timerkorrektur bleiben unbestätigt; die Figurenprüfung ist bestanden.
 
 ---
 

@@ -1,6 +1,6 @@
 # GoToBed — Spezifikation
 
-> Zielversion: 1.0.0 · Stand: 2026-09-29 · Status: Implementierung 0.4.3 vorhanden; Ingame-Abnahme offen (siehe TODO.md)
+> Zielversion: 1.0.0 · Stand: 2026-09-29 · Status: Implementierung 0.4.3 vorhanden; Papa/Mama ingame bestätigt, übrige Ingame-Abnahme offen (siehe TODO.md)
 > Paper-Plugin: `/go-to-bed` setzt einem Spieler ab einer Uhrzeit ein Elternpaar vor die Nase.
 >
 > **Installieren:** Wenn der Nutzer „installieren“, „nochmal installieren“ oder ähnlich sagt → Abschnitt 8 befolgen. Nicht nach dem Server fragen, Host steht in der SSH-Config.
@@ -356,7 +356,7 @@ Config nach dem ersten Enable: `/home/pat/minecraft-server/plugins/GoToBed/confi
 - [ ] `/go-to-bed <HH:mm> <spieler> <satz>` ist nur mit `gotobed.admin` (default op) nutzbar
 - [ ] Uhrzeit `HH:mm` gilt für heute, Europe/Berlin; liegt sie in der Vergangenheit, starten die Eltern sofort
 - [ ] `/go-to-bed now <spieler> <satz>` startet ohne Wartezeit
-- [ ] Ab der Aktivierung stehen zwei Mannequins (Papa blond + weißer Bart, Mama dunkelblond) vor dem Spieler
+- [x] Papa und Mama erscheinen als zwei unterschiedliche Figuren (Nutzerbestätigung 2026-09-29; Aussehen der Texturen separat geprüft)
 - [ ] Alle Spieler in Sichtweite sehen die Eltern
 - [ ] Die Eltern haben Kollision und folgen dem Spieler (Yaw, alle 2 Ticks, alle Welten)
 - [ ] Nur das Opfer sieht alle 10 s den Satz im Chat, im Wechsel Papa/Mama; erste Zeile sofort
