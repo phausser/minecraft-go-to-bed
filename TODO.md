@@ -1,6 +1,6 @@
 # GoToBed — TODO
 
-> Stand: 2026-09-17 · Iteration 4 lokal fertig (`GoToBed-0.4.1`)
+> Stand: 2026-09-28 · `GoToBed-0.4.2` lokal gebaut und auf pfefferminz vorhanden; Sichtprüfung im Spiel offen
 > Zyklus: **Planen → Implementieren → Review → Self-Check → Abschluss**
 >
 > Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[-]` verworfen
@@ -135,9 +135,9 @@
 **Ziel:** v1 gegen SPEC prüfen, JAR auf pfefferminz, ingame bestätigt.
 
 ### Tasks
-- [ ] Alle SPEC-§5-Keys aus `config.yml` lesen, Defaults identisch
-- [ ] Texte zentral unter `messages.*`
-- [ ] README mit Build + Installation (Verweis auf SPEC §8)
+- [x] Alle SPEC-§5-Keys aus `config.yml` lesen, Defaults identisch (Codeprüfung 2026-09-28)
+- [x] Texte zentral unter `messages.*` (Codeprüfung 2026-09-28; Permission-Ablehnung durch Paper)
+- [x] README mit Build + Installation (Verweis auf SPEC §8)
 - [ ] Version 1.0.0, `./gradlew build`
 - [ ] Installieren laut SPEC §8 (alte JARs weg, SIGTERM, `setsid ./start-paper.sh`)
 - [ ] Log: Enabling GoToBed, kein Error
@@ -161,7 +161,16 @@
 - [ ] Server-Neustart mit aktivem Auftrag stellt Eltern wieder her
 - [ ] Zweites `/go-to-bed` ersetzt Satz/Zeit
 
-### Status: **Offen**
+### Status: **In Arbeit** — Build 0.4.2 und 22 Tests einschließlich Formatprüfung erfolgreich; v1-Freigabe und Ingame-Prüfung offen
+
+### Untersuchung „zweimal Mama“ (2026-09-28)
+
+- Auf pfefferminz liegt `GoToBed-0.4.2.jar`; der Skin-Code enthält bereits getrennte Profil-UUIDs und Texturen.
+- Beide signierten Texture-Payloads verweisen auf unterschiedliche Bilder. Papa nutzt classic/wide, Mama slim.
+- Die Bilder wurden von `textures.minecraft.net` abgerufen und visuell geprüft: Papa blond mit weißem Bart, Mama dunkelblond ohne Bart. Die heruntergeladenen Bilder stimmen pixelgenau mit den jeweiligen PNGs im Projekt überein.
+- Regressionstests prüfen unterschiedliche Textur-Adressen und Payload-Profil-IDs, die Modellzuordnung, decodierbare Texture-/Signaturdaten, URL-Konsistenz, 64×64-PNGs und Papas Bart. Sie prüfen weder die Signatur kryptografisch noch die Darstellung im Minecraft-Client.
+- Kein reproduzierter Darstellungsfehler, daher keine Änderung am Laufzeitcode und kein Server-Neustart im Rahmen dieser Untersuchung.
+- Noch offen: Im Spiel `/go-to-bed now <spieler> Testsatz` ausführen und beide Figuren nach dem Laden der Skins ansehen. Papa: blaues Oberteil, braune Hose, weißer Bart. Mama: rotes Oberteil, blaue Hose, kein Bart. Bei erneutem Fehler die sichtbaren Namen und das Aussehen festhalten; damit lässt sich ein falscher Skin von einem Standardskin bei fehlgeschlagenem Laden unterscheiden.
 
 ---
 

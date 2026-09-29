@@ -23,6 +23,7 @@ repositories {
 dependencies {
     compileOnly("io.papermc.paper:paper-api:26.1.2.build.72-stable")
     testImplementation("org.junit.jupiter:junit-jupiter:5.11.4")
+    testImplementation("com.google.code.gson:gson:2.13.2")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 }
 

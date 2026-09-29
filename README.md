@@ -23,6 +23,17 @@ Zielserver: Paper **26.1.2**, Java **25**. Permission `gotobed.admin` (default o
 
 JAR: `build/libs/GoToBed-<version>.jar`
 
+Der Build führt auch Tests und die Formatprüfung aus. Die Skin-Tests prüfen unter anderem, dass Papa und Mama unterschiedliche Texturen mit den passenden Modellen verwenden. Die tatsächliche Darstellung muss zusätzlich im Spiel geprüft werden.
+
+## Figuren prüfen
+
+Mit `/go-to-bed now <spieler> Testsatz` starten und die Skins laden lassen:
+
+- **Papa:** blond, weißer Bart, blaues Oberteil, braune Hose, breite Arme.
+- **Mama:** dunkelblond, kein Bart, rotes Oberteil, blaue Hose, schmale Arme.
+
+Danach mit `/go-to-bed cancel <spieler>` beenden. Falls beide gleich aussehen, die Namen über den Figuren und das sichtbare Aussehen festhalten. Untersuchungsstand und offene Ingame-Prüfungen stehen in [TODO.md](TODO.md).
+
 ## Installieren
 
 Auf **pfefferminz** (`/home/pat/minecraft-server`), wie [SPEC.md §8](SPEC.md):

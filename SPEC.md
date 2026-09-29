@@ -1,6 +1,6 @@
 # GoToBed — Spezifikation
 
-> Version: 1.0.0 · Stand: 2026-09-17 · Status: v1 spezifiziert, noch nicht implementiert
+> Zielversion: 1.0.0 · Stand: 2026-09-28 · Status: Implementierung 0.4.2 vorhanden; Ingame-Abnahme offen (siehe TODO.md)
 > Paper-Plugin: `/go-to-bed` setzt einem Spieler ab einer Uhrzeit ein Elternpaar vor die Nase.
 >
 > **Installieren:** Wenn der Nutzer „installieren“, „nochmal installieren“ oder ähnlich sagt → Abschnitt 8 befolgen. Nicht nach dem Server fragen, Host steht in der SSH-Config.
