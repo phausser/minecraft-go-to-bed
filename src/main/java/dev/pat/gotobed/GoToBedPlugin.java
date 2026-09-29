@@ -21,6 +21,13 @@ public final class GoToBedPlugin extends JavaPlugin {
             return;
         }
         var defaults = YamlConfiguration.loadConfiguration(new InputStreamReader(resource, StandardCharsets.UTF_8));
+        // Refresh old stock hints while preserving administrator-customized messages.
+        if ("/go-to-bed <HH:mm> <spieler> <satz>".equals(getConfig().getString("messages.usage"))) {
+            getConfig().set("messages.usage", defaults.getString("messages.usage"));
+        }
+        if ("Uhrzeit muss HH:mm sein, z. B. 22:00.".equals(getConfig().getString("messages.invalid-time"))) {
+            getConfig().set("messages.invalid-time", defaults.getString("messages.invalid-time"));
+        }
         getConfig().setDefaults(defaults);
         getConfig().options().copyDefaults(true);
         saveConfig();

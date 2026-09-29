@@ -98,7 +98,9 @@ final class GoToBedConfig {
     }
 
     String invalidTime() {
-        return msg("invalid-time", "Uhrzeit muss HH:mm sein, z. B. 22:00.");
+        return msg(
+                "invalid-time",
+                "Zeit muss HH:mm (z. B. 22:00) oder eine positive Dauer in m/h sein (z. B. 30m, 2h; max. 365 Tage).");
     }
 
     String emptySentence() {
@@ -111,7 +113,7 @@ final class GoToBedConfig {
     }
 
     String usage() {
-        return msg("usage", "/go-to-bed <HH:mm> <spieler> <satz>");
+        return msg("usage", "/go-to-bed <HH:mm|30m|2h> <spieler> <satz>");
     }
 
     String chatPapa(String sentence) {

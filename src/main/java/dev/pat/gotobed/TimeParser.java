@@ -12,11 +12,14 @@ import java.util.regex.Pattern;
 final class TimeParser {
 
     static final DateTimeFormatter DISPLAY = DateTimeFormatter.ofPattern("HH:mm");
+    static final DateTimeFormatter DATE_DISPLAY = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
     private static final Pattern TIME = Pattern.compile("^(\\d{1,2}):(\\d{2})$");
+    private static final Pattern RELATIVE = Pattern.compile("^([0-9]+)([mh])$", Pattern.CASE_INSENSITIVE);
+    private static final long MAX_RELATIVE_SECONDS = 365L * 24 * 60 * 60;
 
-    record Result(LocalTime time, Instant scheduledAt, boolean immediate) {
-        String display() {
-            return time.format(DISPLAY);
+    record Result(LocalTime time, Instant scheduledAt, boolean immediate, String display) {
+        Result(LocalTime time, Instant scheduledAt, boolean immediate) {
+            this(time, scheduledAt, immediate, time.format(DISPLAY));
         }
     }
 
@@ -58,6 +61,21 @@ final class TimeParser {
     static Optional<Result> parse(String raw, ZoneId zone, Instant now) {
         if (raw == null) {
             return Optional.empty();
+        }
+        var relative = RELATIVE.matcher(raw.trim());
+        if (relative.matches()) {
+            try {
+                long amount = Long.parseLong(relative.group(1));
+                long unitSeconds = relative.group(2).equalsIgnoreCase("h") ? 3600L : 60L;
+                if (amount < 1 || amount > MAX_RELATIVE_SECONDS / unitSeconds) {
+                    return Optional.empty();
+                }
+                Instant scheduledAt = now.plusSeconds(amount * unitSeconds);
+                ZonedDateTime local = scheduledAt.atZone(zone);
+                return Optional.of(new Result(local.toLocalTime(), scheduledAt, false, local.format(DATE_DISPLAY)));
+            } catch (NumberFormatException | DateTimeException ignored) {
+                return Optional.empty();
+            }
         }
         var matcher = TIME.matcher(raw.trim());
         if (!matcher.matches()) {

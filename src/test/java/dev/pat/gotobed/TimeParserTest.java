@@ -67,6 +67,73 @@ class TimeParserTest {
     }
 
     @Test
+    void relativeMinutesPreserveSecondsAndHoursAcceptUppercase() {
+        Instant start = NOW.plusSeconds(17).plusNanos(123);
+        var minutes = TimeParser.parse("30m", BERLIN, start).orElseThrow();
+        assertEquals(start.plusSeconds(1800), minutes.scheduledAt());
+        assertFalse(minutes.immediate());
+        assertEquals("17.09.2026 22:00:17", minutes.display());
+        assertEquals(
+                start.plusSeconds(7200),
+                TimeParser.parse(" 2H ", BERLIN, start).orElseThrow().scheduledAt());
+    }
+
+    @Test
+    void relativeTimeCanCrossMidnight() {
+        var result = TimeParser.parse("3h", BERLIN, NOW).orElseThrow();
+        assertEquals(NOW.plusSeconds(10800), result.scheduledAt());
+        assertEquals("18.09.2026 00:30:00", result.display());
+        assertFalse(result.immediate());
+    }
+
+    @Test
+    void relativeHoursAreElapsedTimeAcrossBothClockChanges() {
+        for (String timestamp : new String[] {"2026-03-29T00:30:00Z", "2026-10-25T00:30:00Z"}) {
+            Instant start = Instant.parse(timestamp);
+            assertEquals(
+                    start.plusSeconds(7200),
+                    TimeParser.parse("2h", BERLIN, start).orElseThrow().scheduledAt());
+        }
+    }
+
+    @Test
+    void relativeDurationHasPositiveBoundedWholeUnits() {
+        for (String invalid : new String[] {
+            "0m",
+            "0h",
+            "-1m",
+            "+1h",
+            "1.5h",
+            "1h30m",
+            "30 m",
+            "1d",
+            "60s",
+            "525601m",
+            "8761h",
+            "999999999999999999999999999m"
+        }) {
+            assertTrue(TimeParser.parse(invalid, BERLIN, NOW).isEmpty(), invalid);
+        }
+        assertEquals(
+                NOW.plusSeconds(365L * 86400),
+                TimeParser.parse("8760h", BERLIN, NOW).orElseThrow().scheduledAt());
+        assertEquals(
+                NOW.plusSeconds(365L * 86400),
+                TimeParser.parse("525600m", BERLIN, NOW).orElseThrow().scheduledAt());
+        assertEquals(
+                NOW.plusSeconds(60),
+                TimeParser.parse("1m", BERLIN, NOW).orElseThrow().scheduledAt());
+    }
+
+    @Test
+    void splitsRelativeTimeWithoutChangingTheSentence() {
+        var parts = TimeParser.splitSchedule("30m Z_o_o_m Ab ins Bett!").orElseThrow();
+        assertEquals("30m", parts.time());
+        assertEquals("Z_o_o_m", parts.player());
+        assertEquals("Ab ins Bett!", parts.sentence());
+    }
+
+    @Test
     void rejectsInvalidInput() {
         assertEquals(Optional.empty(), TimeParser.parse(null, BERLIN, NOW));
         assertEquals(Optional.empty(), TimeParser.parse("", BERLIN, NOW));

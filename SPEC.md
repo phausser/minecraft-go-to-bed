@@ -1,6 +1,6 @@
 # GoToBed — Spezifikation
 
-> Zielversion: 1.0.0 · Stand: 2026-09-29 · Status: Implementierung 0.4.3 vorhanden; Papa/Mama ingame bestätigt, übrige Ingame-Abnahme offen (siehe TODO.md)
+> Zielversion: 1.0.0 · Stand: 2026-09-29 · Status: Implementierung 0.5.0 mit Relativzeiten vorhanden; Papa/Mama ingame bestätigt, übrige Ingame-Abnahme offen (siehe TODO.md)
 > Paper-Plugin: `/go-to-bed` setzt einem Spieler ab einer Uhrzeit ein Elternpaar vor die Nase.
 >
 > **Installieren:** Wenn der Nutzer „installieren“, „nochmal installieren“ oder ähnlich sagt → Abschnitt 8 befolgen. Nicht nach dem Server fragen, Host steht in der SSH-Config.
@@ -29,7 +29,7 @@ GoToBed wird weiterhin gegen Paper-API **26.1.2** gebaut und nutzt `api-version:
 
 ## 3. Ablauf
 
-1. Admin (OP oder Permission) schreibt `/go-to-bed <HH:mm> <spieler> <satz>`.
+1. Admin (OP oder Permission) schreibt `/go-to-bed <HH:mm|30m|2h> <spieler> <satz>`.
 2. Plugin merkt sich Auftrag: Ziel-UUID, Satz, geplante Uhrzeit, Status `scheduled`.
 3. Liegt `HH:mm` **heute noch in der Zukunft** → warten. Liegt sie **jetzt oder in der Vergangenheit** → Status `active`, Eltern spawnen (Spieler online) bzw. beim nächsten Join.
 4. Solange `active` und Spieler online:
@@ -48,7 +48,7 @@ Im Bett schlafen, Sterben, Weltwechsel, `/kill`, Gamemode-Wechsel beenden den Au
 
 | Punkt | Regel |
 |---|---|
-| Hauptbefehl | `/go-to-bed <HH:mm> <spieler> <satz>` |
+| Hauptbefehl | `/go-to-bed <HH:mm\|30m\|2h> <spieler> <satz>` |
 | Sofort | `/go-to-bed now <spieler> <satz>` |
 | Abbruch | `/go-to-bed cancel <spieler>` |
 | Status | `/go-to-bed status [spieler]` — ohne Argument: alle aktiven/geplanten |
@@ -56,7 +56,7 @@ Im Bett schlafen, Sterben, Weltwechsel, `/kill`, Gamemode-Wechsel beenden den Au
 | Permission | `gotobed.admin` |
 | Default | `op` |
 | Console | erlaubt |
-| Tab-Complete | Subcommands `now` / `cancel` / `status`, Online-Spieler, Uhrzeit-Hinweis `HH:mm` |
+| Tab-Complete | Subcommands `now` / `cancel` / `status`, Online-Spieler, Uhrzeiten und Beispiele `10m` / `30m` / `1h` / `2h` |
 
 Kein Befehl für das Opfer, sich selbst zu befreien.
 
@@ -75,8 +75,10 @@ Zweites `/go-to-bed` auf denselben Spieler **überschreibt** den vorherigen Auft
 - Zeitzone: **Europe/Berlin** (Server-Lokalzeit).
 - Bedeutung: **heute** um diese Uhrzeit.
 - Ist der Zeitpunkt `<= jetzt` → Auftrag **sofort** aktiv (nicht auf morgen schieben).
-- Keine Sekunden, keine Relativzeiten (`30m`) in v1.
-- Ungültiges Format → ablehnen, Hinweis auf `HH:mm`.
+- Alternativ positive ganze Minuten (`30m`) oder Stunden (`2h`), Groß-/Kleinschreibung egal, maximal 365 Tage. Keine Sekunden, Dezimalwerte oder Kombinationen wie `1h30m`.
+- Relative Zeiten rechnen ab dem aktuellen Instant, auch über Mitternacht und Sommer-/Winterzeitwechsel. Der errechnete Instant wird wie ein absoluter Termin persistiert; ein Neustart beginnt die Dauer nicht neu.
+- Relative Bestätigungen und geplante Statuszeilen zeigen Datum und Uhrzeit einschließlich Sekunden in der konfigurierten Zeitzone.
+- Ungültiges Format oder Dauer außerhalb des erlaubten Bereichs → ablehnen, Hinweis auf `HH:mm`, `m`/`h` und das Limit.
 
 `/go-to-bed now` überspringt die Uhrzeit und aktiviert sofort.
 
@@ -211,10 +213,10 @@ Spieler- und Admin-Texte auf Deutsch, über `messages.*` überschreibbar.
 | Status aktiv, offline | `{player}: aktiv, offline seit {minutes} min — {sentence}` |
 | Status leer | `Keine Aufträge.` |
 | Unbekannter Spieler | `Spieler nicht gefunden: {player}` |
-| Ungültige Zeit | `Uhrzeit muss HH:mm sein, z. B. 22:00.` |
+| Ungültige Zeit | `Zeit muss HH:mm oder eine positive Dauer in m/h sein (max. 365 Tage).` |
 | Leerer Satz | `Satz fehlt.` |
 | Satz zu lang | `Satz ist zu lang (max. {max} Zeichen).` |
-| Usage | `/go-to-bed <HH:mm> <spieler> <satz>` |
+| Usage | `/go-to-bed <HH:mm\|30m\|2h> <spieler> <satz>` |
 | Chat Papa | `<Papa> {sentence}` |
 | Chat Mama | `<Mama> {sentence}` |
 | Keine Permission | Standard-Paper-Meldung reicht |
@@ -340,7 +342,6 @@ Config nach dem ersten Enable: `/home/pat/minecraft-server/plugins/GoToBed/confi
 
 ## 9. Nicht in v1
 
-- Relativzeiten (`30m`, `2h`)
 - Nur-Opfer-Sichtbarkeit (Packet-NPCs)
 - Satz an Nearby oder den ganzen Server
 - Durchlaufen ohne Kollision
@@ -353,7 +354,7 @@ Config nach dem ersten Enable: `/home/pat/minecraft-server/plugins/GoToBed/confi
 
 ## 10. Akzeptanzkriterien (v1)
 
-- [ ] `/go-to-bed <HH:mm> <spieler> <satz>` ist nur mit `gotobed.admin` (default op) nutzbar
+- [ ] `/go-to-bed <HH:mm|30m|2h> <spieler> <satz>` ist nur mit `gotobed.admin` (default op) nutzbar
 - [ ] Uhrzeit `HH:mm` gilt für heute, Europe/Berlin; liegt sie in der Vergangenheit, starten die Eltern sofort
 - [ ] `/go-to-bed now <spieler> <satz>` startet ohne Wartezeit
 - [x] Papa und Mama erscheinen als zwei unterschiedliche Figuren (Nutzerbestätigung 2026-09-29; Aussehen der Texturen separat geprüft)
@@ -369,3 +370,5 @@ Config nach dem ersten Enable: `/home/pat/minecraft-server/plugins/GoToBed/confi
 - [ ] Follow-Takt, Sprech-Intervall, Offline-Minuten und Texte stehen in `config.yml`
 - [ ] `./gradlew build` erzeugt eine installierbare JAR
 - [x] Plugin 0.4.3 startet auf dem aktuellen Server Paper 26.2-129 ohne Error im Startlog (2026-09-29)
+
+Relativzeiten (0.5.0): Parser-, Grenzwert-, Mitternachts- und Zeitumstellungstests vorhanden; Ingame-Test und Installation noch offen.

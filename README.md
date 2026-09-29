@@ -4,18 +4,20 @@ Paper-Plugin: `/go-to-bed` setzt einem Spieler ab einer Uhrzeit Papa und Mama vo
 
 Server: Paper **26.2** (Build 129), Java **25**. Build-API weiterhin **26.1.2**. Permission `gotobed.admin` (default op). Details: [SPEC.md](SPEC.md).
 
-Stand 2026-09-29: **0.4.3** gebaut und auf pfefferminz installiert; Start auf Paper 26.2 ohne Fehler bestätigt. 26 Tests und Formatprüfung bestanden. Papa und Mama erscheinen laut Ingame-Test korrekt. Die Offline- und übrigen Verhaltenstests sind noch nicht bestätigt; Details in [TODO.md](TODO.md).
+Stand 2026-09-29: **0.5.0** ergänzt relative Zeiten; auf pfefferminz ist zuletzt **0.4.3** installiert und auf Paper 26.2 geprüft. Papa und Mama erscheinen laut Ingame-Test korrekt. Die Offline- und übrigen Verhaltenstests sind noch nicht bestätigt; Details in [TODO.md](TODO.md).
 
 ## Befehle
 
 ```
-/go-to-bed <HH:mm> <spieler> <satz>
+/go-to-bed <HH:mm|30m|2h> <spieler> <satz>
 /go-to-bed now <spieler> <satz>
 /go-to-bed cancel <spieler>
 /go-to-bed status [spieler]
 ```
 
-`HH:mm` gilt für heute (Europe/Berlin). Liegt die Zeit in der Vergangenheit, starten die Eltern sofort. In der **Konsole ohne Slash**.
+`HH:mm` gilt für heute (Europe/Berlin). Liegt die Zeit in der Vergangenheit, starten die Eltern sofort. Relative Zeiten (`30m`, `2h`, auch `M`/`H`) zählen ab jetzt; erlaubt sind positive ganze Minuten oder Stunden bis 365 Tage. Für 90 Minuten: `90m`, nicht `1h30m`. Sie funktionieren auch über Mitternacht und Zeitumstellungen hinweg. In der **Konsole ohne Slash**.
+
+Beispiel: `/go-to-bed 30m Z_o_o_m Ab ins Bett!`. Bestätigung und Status nennen den Zielzeitpunkt; der gespeicherte Termin bleibt bei einem Neustart erhalten. Alte unveränderte Standard-Hilfetexte werden beim Start aktualisiert; eigene Texte in `messages.usage` und `messages.invalid-time` bitte bei Bedarf ergänzen.
 
 ## Bauen
 

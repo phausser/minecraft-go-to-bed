@@ -169,7 +169,7 @@ final class GoToBedCommand {
         if (!service.isDue(assignment, now)) {
             return config.statusScheduled(
                     assignment.name(),
-                    assignment.scheduledAt().atZone(config.timezone()).format(TimeParser.DISPLAY),
+                    assignment.scheduledAt().atZone(config.timezone()).format(TimeParser.DATE_DISPLAY),
                     assignment.sentence());
         }
         if (assignment.logoutAt() != null) {
@@ -216,6 +216,11 @@ final class GoToBedCommand {
     private CompletableFuture<Suggestions> suggestTimes(
             CommandContext<CommandSourceStack> ctx, SuggestionsBuilder builder) {
         String remaining = builder.getRemaining();
+        for (String suggestion : List.of("10m", "30m", "1h", "2h")) {
+            if (suggestion.startsWith(remaining)) {
+                builder.suggest(suggestion);
+            }
+        }
         int nextHour = ZonedDateTime.now(config.timezone()).getHour();
         for (int hour : new int[] {nextHour, 21, 22, 23}) {
             String suggestion = String.format("%02d:00", Math.floorMod(hour, 24));
