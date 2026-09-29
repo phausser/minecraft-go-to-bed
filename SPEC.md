@@ -13,7 +13,7 @@ Ein Admin kann einem Spieler per Befehl eine Uhrzeit und einen Satz geben. Ab di
 
 | Punkt | Wert |
 |---|---|
-| Server | Paper **26.1.2** (Build 72), Minecraft **26.1.2** |
+| Server | Paper **26.2** (Build 129), Minecraft **26.2** — geprüft am 2026-09-29 |
 | Java | **25** |
 | Host | `pfefferminz` (`192.168.1.170`, User `pat`) |
 | Minecraft-Ordner | `/home/pat/minecraft-server` |
@@ -25,7 +25,7 @@ Ein Admin kann einem Spieler per Befehl eine Uhrzeit und einen Satz geben. Ab di
 | Kollision | **an** — Eltern stehen im Weg |
 | Uhrzeit | heute `HH:mm` Europe/Berlin; schon vorbei → **sofort** |
 
-Der Server ist **nicht** 1.21.0. Bestehende Plugins (SimpleRTP, SimpleHome, …) nutzen `api-version: "26.1"`. GoToBed tut dasselbe.
+GoToBed wird weiterhin gegen Paper-API **26.1.2** gebaut und nutzt `api-version: "26.1"`. Der Start von GoToBed 0.4.3 auf dem inzwischen aktualisierten Server **26.2** wurde am 2026-09-29 bestätigt.
 
 ## 3. Ablauf
 
@@ -324,7 +324,7 @@ Warten, bis der Prozess weg ist (meist < 15 s; Worlds speichern). Dann starten:
 ssh pfefferminz 'bash -lc "cd /home/pat/minecraft-server && setsid ./start-paper.sh >> /home/pat/minecraft-server/logs/console.out 2>&1 < /dev/null & echo started:\$!"'
 ```
 
-`start-paper.sh` startet `paper-26.1.*.jar nogui` mit 6G/8G Heap. `setsid` löst den Prozess von der SSH-Session. Log bleibt `logs/latest.log`.
+`start-paper.sh` startet aktuell `paper-26.2-*.jar nogui` mit 6G/8G Heap. `setsid` löst den Prozess von der SSH-Session. Log bleibt `logs/latest.log`.
 
 ### 8.4 Prüfen
 
@@ -368,4 +368,4 @@ Config nach dem ersten Enable: `/home/pat/minecraft-server/plugins/GoToBed/confi
 - [ ] Zweites `/go-to-bed` auf denselben Spieler ersetzt den alten Auftrag
 - [ ] Follow-Takt, Sprech-Intervall, Offline-Minuten und Texte stehen in `config.yml`
 - [ ] `./gradlew build` erzeugt eine installierbare JAR
-- [ ] Plugin startet auf Paper 26.1.2 ohne Error im Log
+- [x] Plugin 0.4.3 startet auf dem aktuellen Server Paper 26.2-129 ohne Error im Startlog (2026-09-29)

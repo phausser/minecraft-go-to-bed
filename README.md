@@ -2,9 +2,9 @@
 
 Paper-Plugin: `/go-to-bed` setzt einem Spieler ab einer Uhrzeit Papa und Mama vor die Nase. Die beiden Mannequins folgen, blockieren, und sagen nur dem Opfer alle 10 s den Satz. Weg sind sie erst nach Logout plus 10 Minuten oder `/go-to-bed cancel`.
 
-Zielserver: Paper **26.1.2**, Java **25**. Permission `gotobed.admin` (default op). Details: [SPEC.md](SPEC.md).
+Server: Paper **26.2** (Build 129), Java **25**. Build-API weiterhin **26.1.2**. Permission `gotobed.admin` (default op). Details: [SPEC.md](SPEC.md).
 
-Stand 2026-09-29: **0.4.3** lokal gebaut, 26 Tests und Formatprüfung bestanden. Papa und Mama erscheinen laut Ingame-Test korrekt. Die Installation von 0.4.3 sowie die Offline- und übrigen Verhaltenstests sind noch nicht bestätigt; Details in [TODO.md](TODO.md).
+Stand 2026-09-29: **0.4.3** gebaut und auf pfefferminz installiert; Start auf Paper 26.2 ohne Fehler bestätigt. 26 Tests und Formatprüfung bestanden. Papa und Mama erscheinen laut Ingame-Test korrekt. Die Offline- und übrigen Verhaltenstests sind noch nicht bestätigt; Details in [TODO.md](TODO.md).
 
 ## Befehle
 

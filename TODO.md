@@ -1,6 +1,6 @@
 # GoToBed — TODO
 
-> Stand: 2026-09-29 · `GoToBed-0.4.3` lokal gebaut; auf pfefferminz zuletzt 0.4.2 geprüft; Papa/Mama im Spiel vom Nutzer bestätigt; übrige Ingame-Prüfungen offen
+> Stand: 2026-09-29 · `GoToBed-0.4.3` auf pfefferminz installiert; Start auf Paper 26.2-129 geprüft; Papa/Mama im Spiel vom Nutzer bestätigt; übrige Ingame-Prüfungen offen
 > Zyklus: **Planen → Implementieren → Review → Self-Check → Abschluss**
 >
 > Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[-]` verworfen
@@ -139,14 +139,14 @@
 - [x] Texte zentral unter `messages.*` (Codeprüfung 2026-09-28; Permission-Ablehnung durch Paper)
 - [x] README mit Build + Installation (Verweis auf SPEC §8)
 - [ ] Version 1.0.0, `./gradlew build`
-- [ ] Installieren laut SPEC §8 (alte JARs weg, SIGTERM, `setsid ./start-paper.sh`)
-- [ ] Log: Enabling GoToBed, kein Error
+- [x] 0.4.3 installiert laut SPEC §8 (2026-09-29; alte JAR und Plugin-Daten gesichert, SIGTERM, `setsid ./start-paper.sh`)
+- [x] Log: Enabling GoToBed v0.4.3, GoToBed aktiv, Done, kein Error (2026-09-29)
 - [ ] Manuelle Ingame-Checkliste unten abhaken
 
 ### Akzeptanzkriterien
 - [ ] SPEC-§10-Kriterien, die ohne Ingame prüfbar sind, abgehakt; Rest dort als Ingame vermerkt
 - [ ] `./gradlew build` erzeugt `GoToBed-1.0.0.jar`
-- [ ] Plugin startet auf Paper 26.1.2 ohne Error
+- [x] Plugin 0.4.3 startet auf dem aktuellen Paper 26.2-129 ohne Error (2026-09-29)
 
 ### Ingame-Checkliste
 - [ ] OP: `/go-to-bed 22:00 <online> Testsatz` (oder `now`) spawnt Eltern
@@ -179,7 +179,8 @@
 - Offline-Timer planen eine erneute Prüfung, wenn die Frist noch nicht abgelaufen ist. Bisher konnte ein knapp zu früher Callback den Auftrag ohne weiteren Timer zurücklassen.
 - Beim Ersetzen eines Timers wird der vorherige Task abgebrochen; eine Aktivierung beim Join entfernt den noch geplanten Start-Task.
 - Vier zusätzliche Tests prüfen Tick-Grenzen, überfällige Fristen und die Restwartezeit nach einer frühen Offline-Prüfung. Die Tests simulieren keinen laufenden Paper-Scheduler.
-- Installation von 0.4.3 und Ingame-Prüfung der Timerkorrektur bleiben unbestätigt; die Figurenprüfung ist bestanden.
+- 0.4.3 am 2026-09-29 installiert und Start geprüft: Paper 26.2-129, Java 25; keine Fehler im Startlog. JAR-Prüfsumme vor Installation bestätigt. Sicherung der alten JAR und Plugin-Daten: `/home/pat/minecraft-server/backups/gotobed-20260929/`.
+- Ingame-Prüfung der Timerkorrektur bleibt offen; die Figurenprüfung ist bestanden.
 
 ---
 
