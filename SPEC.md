@@ -371,4 +371,4 @@ Config nach dem ersten Enable: `/home/pat/minecraft-server/plugins/GoToBed/confi
 - [ ] `./gradlew build` erzeugt eine installierbare JAR
 - [x] Plugin 0.4.3 startet auf dem aktuellen Server Paper 26.2-129 ohne Error im Startlog (2026-09-29)
 
-Relativzeiten (0.5.0): Parser-, Grenzwert-, Mitternachts- und Zeitumstellungstests vorhanden; Ingame-Test und Installation noch offen.
+Relativzeiten (0.5.0): Parser-, Grenzwert-, Mitternachts- und Zeitumstellungstests vorhanden; 0.5.0 auf pfefferminz installiert und Start auf Paper 26.2 bestätigt (2026-09-29); Ingame-Test noch offen.

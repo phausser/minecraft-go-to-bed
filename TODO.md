@@ -1,6 +1,6 @@
 # GoToBed — TODO
 
-> Stand: 2026-09-29 · Relativzeiten in 0.5.0 implementiert; `GoToBed-0.4.3` auf pfefferminz installiert; Start auf Paper 26.2-129 geprüft; Papa/Mama im Spiel vom Nutzer bestätigt; übrige Ingame-Prüfungen offen
+> Stand: 2026-09-29 · Relativzeiten in 0.5.0 implementiert; `GoToBed-0.5.0` auf pfefferminz installiert; Start auf Paper 26.2-129 geprüft; Papa/Mama im Spiel vom Nutzer bestätigt; übrige Ingame-Prüfungen offen
 > Zyklus: **Planen → Implementieren → Review → Self-Check → Abschluss**
 >
 > Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[-]` verworfen
@@ -186,7 +186,7 @@
 
 ## Backlog (nicht v1)
 
-- [x] Relativzeiten (`30m`, `2h`) in 0.5.0 implementiert (Installation/Ingame-Test offen)
+- [x] Relativzeiten (`30m`, `2h`) in 0.5.0 implementiert und installiert (Ingame-Test offen)
 - [ ] Nur-Opfer-Sichtbarkeit
 - [ ] Nearby- oder Server-Broadcast des Satzes
 - [ ] Option ohne Kollision
@@ -201,5 +201,8 @@
 - Tab-Vorschläge und Hilfetexte ergänzt; alte unveränderte Standardtexte werden automatisch aktualisiert, angepasste Texte bleiben erhalten.
 - Bestätigung relativer Termine und Status geplanter Aufträge mit Datum und Uhrzeit.
 - Tests für Minuten/Stunden, Sekundenreste, Mitternacht, beide Zeitumstellungen, Grenzen, ungültige Eingaben und Befehlszerlegung.
-- [ ] 0.5.0 installieren und `/go-to-bed 1m <spieler> Testsatz` im Spiel prüfen.
+- [x] 0.5.0 installiert; SHA-256 geprüft, geordneter Neustart, GoToBed aktiv und Done ohne Fehler bestätigt (2026-09-29).
+- Sicherung: `/home/pat/minecraft-server/backups/gotobed-0.5.0-20260929-110231/`.
+- [ ] `/go-to-bed 1m <spieler> Testsatz` im Spiel prüfen.
+- [ ] Älteren abweichenden Servertext `messages.usage` korrigieren: aktuell noch Spieler vor Uhrzeit; gültig ist `/go-to-bed <HH:mm|30m|2h> <spieler> <satz>`. Der abweichende Text wurde durch die Migration bewusst erhalten.
 - Build 0.5.0 erfolgreich: 31 Tests und Formatprüfung bestanden.

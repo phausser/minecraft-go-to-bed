@@ -4,7 +4,7 @@ Paper-Plugin: `/go-to-bed` setzt einem Spieler ab einer Uhrzeit Papa und Mama vo
 
 Server: Paper **26.2** (Build 129), Java **25**. Build-API weiterhin **26.1.2**. Permission `gotobed.admin` (default op). Details: [SPEC.md](SPEC.md).
 
-Stand 2026-09-29: **0.5.0** ergänzt relative Zeiten; auf pfefferminz ist zuletzt **0.4.3** installiert und auf Paper 26.2 geprüft. Papa und Mama erscheinen laut Ingame-Test korrekt. Die Offline- und übrigen Verhaltenstests sind noch nicht bestätigt; Details in [TODO.md](TODO.md).
+Stand 2026-09-29: **0.5.0** mit relativen Zeiten ist auf pfefferminz installiert; Start auf Paper 26.2 ohne Fehler bestätigt. 31 Tests und Formatprüfung bestanden. Papa und Mama erscheinen laut Ingame-Test korrekt. Die Offline- und übrigen Verhaltenstests sind noch nicht bestätigt; Details in [TODO.md](TODO.md).
 
 ## Befehle
 
