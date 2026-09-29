@@ -117,6 +117,7 @@ final class GoToBedService implements Listener {
         cancel(clearTasks, resumed.uuid());
         persist();
         if (resumed.status() == AssignmentStatus.ACTIVE) {
+            cancel(activationTasks, resumed.uuid());
             startPresence(player, resumed);
         }
     }
@@ -158,9 +159,8 @@ final class GoToBedService implements Listener {
     }
 
     private void scheduleActivation(Assignment assignment) {
-        Instant now = Instant.now();
-        long delayMs = Math.max(0L, assignment.scheduledAt().toEpochMilli() - now.toEpochMilli());
-        long ticks = Math.max(1L, delayMs / 50L);
+        cancel(activationTasks, assignment.uuid());
+        long ticks = DeadlineDelay.ticksUntil(Instant.now(), assignment.scheduledAt());
         BukkitTask task =
                 plugin.getServer().getScheduler().runTaskLater(plugin, () -> activateDue(assignment.uuid()), ticks);
         activationTasks.put(assignment.uuid(), task);
@@ -169,6 +169,11 @@ final class GoToBedService implements Listener {
     private void activateDue(UUID uuid) {
         Assignment assignment = assignments.get(uuid);
         if (assignment == null || assignment.status() == AssignmentStatus.ACTIVE) {
+            return;
+        }
+        // Tick timing and wall-clock time can diverge; never activate before the deadline.
+        if (!AssignmentRules.shouldActivate(assignment, Instant.now())) {
+            scheduleActivation(assignment);
             return;
         }
         Assignment active = assignment.activate();
@@ -183,22 +188,30 @@ final class GoToBedService implements Listener {
     }
 
     private void scheduleOfflineClear(Assignment assignment) {
+        cancel(clearTasks, assignment.uuid());
         Instant logoutAt = assignment.logoutAt();
         if (logoutAt == null) {
             return;
         }
         Instant deadline = logoutAt.plus(offlineTimeout());
-        long delayMs = Math.max(0L, deadline.toEpochMilli() - Instant.now().toEpochMilli());
-        long ticks = Math.max(1L, delayMs / 50L);
+        long ticks = DeadlineDelay.ticksUntil(Instant.now(), deadline);
         BukkitTask task = plugin.getServer()
                 .getScheduler()
                 .runTaskLater(
                         plugin,
                         () -> {
                             Assignment current = assignments.get(assignment.uuid());
-                            if (current != null
-                                    && AssignmentRules.shouldClearOffline(current, Instant.now(), offlineTimeout())) {
-                                clear(current.uuid(), "10 Minuten offline");
+                            if (current == null
+                                    || current.status() != AssignmentStatus.ACTIVE
+                                    || current.logoutAt() == null) {
+                                cancel(clearTasks, assignment.uuid());
+                                return;
+                            }
+                            if (AssignmentRules.shouldClearOffline(current, Instant.now(), offlineTimeout())) {
+                                clear(current.uuid(), "Offlinezeit abgelaufen");
+                            } else {
+                                // An early callback must not leave the assignment without a timer.
+                                scheduleOfflineClear(current);
                             }
                         },
                         ticks);

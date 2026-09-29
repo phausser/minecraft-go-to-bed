@@ -1,6 +1,6 @@
 # GoToBed — TODO
 
-> Stand: 2026-09-28 · `GoToBed-0.4.2` lokal gebaut und auf pfefferminz vorhanden; Sichtprüfung im Spiel offen
+> Stand: 2026-09-29 · `GoToBed-0.4.3` lokal gebaut; auf pfefferminz zuletzt 0.4.2 geprüft; Sichtprüfung im Spiel offen
 > Zyklus: **Planen → Implementieren → Review → Self-Check → Abschluss**
 >
 > Legende: `[ ]` offen · `[~]` in Arbeit · `[x]` erledigt · `[-]` verworfen
@@ -161,7 +161,7 @@
 - [ ] Server-Neustart mit aktivem Auftrag stellt Eltern wieder her
 - [ ] Zweites `/go-to-bed` ersetzt Satz/Zeit
 
-### Status: **In Arbeit** — Build 0.4.2 und 22 Tests einschließlich Formatprüfung erfolgreich; v1-Freigabe und Ingame-Prüfung offen
+### Status: **In Arbeit** — Build 0.4.3 und 26 Tests einschließlich Formatprüfung erfolgreich; v1-Freigabe und Ingame-Prüfung offen
 
 ### Untersuchung „zweimal Mama“ (2026-09-28)
 
@@ -171,6 +171,15 @@
 - Regressionstests prüfen unterschiedliche Textur-Adressen und Payload-Profil-IDs, die Modellzuordnung, decodierbare Texture-/Signaturdaten, URL-Konsistenz, 64×64-PNGs und Papas Bart. Sie prüfen weder die Signatur kryptografisch noch die Darstellung im Minecraft-Client.
 - Kein reproduzierter Darstellungsfehler, daher keine Änderung am Laufzeitcode und kein Server-Neustart im Rahmen dieser Untersuchung.
 - Noch offen: Im Spiel `/go-to-bed now <spieler> Testsatz` ausführen und beide Figuren nach dem Laden der Skins ansehen. Papa: blaues Oberteil, braune Hose, weißer Bart. Mama: rotes Oberteil, blaue Hose, kein Bart. Bei erneutem Fehler die sichtbaren Namen und das Aussehen festhalten; damit lässt sich ein falscher Skin von einem Standardskin bei fehlgeschlagenem Laden unterscheiden.
+
+### Timerkorrektur 0.4.3 (2026-09-29)
+
+- Wartezeiten werden auf volle Ticks aufgerundet, einschließlich Resten unter einer Millisekunde.
+- Geplante Starts prüfen beim Callback erneut die Uhrzeit. Bei zu frühem Callback wird der Timer neu gesetzt.
+- Offline-Timer planen eine erneute Prüfung, wenn die Frist noch nicht abgelaufen ist. Bisher konnte ein knapp zu früher Callback den Auftrag ohne weiteren Timer zurücklassen.
+- Beim Ersetzen eines Timers wird der vorherige Task abgebrochen; eine Aktivierung beim Join entfernt den noch geplanten Start-Task.
+- Vier zusätzliche Tests prüfen Tick-Grenzen, überfällige Fristen und die Restwartezeit nach einer frühen Offline-Prüfung. Die Tests simulieren keinen laufenden Paper-Scheduler.
+- Installation von 0.4.3 und Ingame-Abnahme bleiben offen.
 
 ---
 
