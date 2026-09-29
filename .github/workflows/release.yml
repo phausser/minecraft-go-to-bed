@@ -1,0 +1,61 @@
+name: Release
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Existing version tag, e.g. v0.5.0'
+        required: true
+        type: string
+
+concurrency:
+  group: release-${{ inputs.tag }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    env:
+      RELEASE_TAG: ${{ inputs.tag }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: refs/tags/${{ inputs.tag }}
+          persist-credentials: false
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 25
+      - uses: gradle/actions/wrapper-validation@v4
+      - uses: gradle/actions/setup-gradle@v4
+      - name: Validate release tag
+        shell: bash
+        run: |
+          if [[ ! "$RELEASE_TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo 'Expected a release tag such as v0.5.0.' >&2
+            exit 1
+          fi
+      - name: Build and test
+        run: ./gradlew clean build --no-daemon
+      - name: Verify JAR version
+        shell: bash
+        run: |
+          jar="build/libs/GoToBed-${RELEASE_TAG#v}.jar"
+          if [[ ! -f "$jar" ]]; then
+            echo 'Tag must match the version in build.gradle.kts.' >&2
+            exit 1
+          fi
+          echo "RELEASE_JAR=$jar" >> "$GITHUB_ENV"
+      - name: Publish GitHub release with JAR
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          gh release create "$RELEASE_TAG" "$RELEASE_JAR" \
+            --verify-tag --generate-notes --title "GoToBed $RELEASE_TAG"
